@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 
 
 # Load model
-model = joblib.load("../models/xgbclassifier.joblib")
+model = joblib.load("models/xgbclassifier.joblib")
+
 
 st.set_page_config(page_title="Fraud Detection", layout="wide")
 st.title("💳 Fraud Detection App")
