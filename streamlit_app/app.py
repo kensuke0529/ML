@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 # Load model
-model = joblib.load("models/xgbclassifier.joblib")
+model = joblib.load("../models/xgbclassifier.joblib")
 
 st.set_page_config(page_title="Fraud Detection", layout="wide")
 st.title("💳 Fraud Detection App")
@@ -14,8 +14,8 @@ st.title("💳 Fraud Detection App")
 st.markdown(
     "Use the form below to simulate a credit card transaction and check if it might be **fraudulent**.")
 
-tab1, tab2, tab3 = st.tabs(
-    ["📈 Model", "🗃 Model Performance Metrics", "Dataset"])
+tab1, tab2 = st.tabs(
+    ["📈 Model", "🗃 Model Performance Metrics"])
 
 with tab1:
     # Define features
@@ -72,49 +72,3 @@ with tab2:
     st.table(df)
 
     st.write("XGBoost Classifier is the best model with high Recall and F1 Score!")
-
-with tab3:
-
-    df = pd.read_csv(
-        "data/creditcard.csv")
-
-    st.write('#### Dataset Overview')
-    st.write(f"Total Transactions: {len(df)}")
-
-    st.write('Due to the privacy and security of the dataset, most of the columns are implemented PCA features. Therefore, we cannot interpret the meaning of each feature except Time and Amount.')
-    st.write('The dataset contains 30 features, including PCA transformed features (V1 to V28) and two original features.')
-
-    st.write("### Credit Card Fraud Detection Dataset")
-    st.table(df.head(10))
-
-    # Show dataset
-    col1, col2, col3 = st.columns(3)
-
-    class_count = df['Class'].value_counts()
-
-
-# --- Plot 1: Class Distribution (Pie Chart)
-    with col1:
-        st.markdown("**Class Distribution**")
-        fig1, ax1 = plt.subplots()
-        ax1.pie(class_count, labels=class_count.index,
-                autopct='%1.1f%%', startangle=90)
-        # Equal aspect ratio ensures that pie is drawn as a circle
-        ax1.axis('equal')
-        st.pyplot(fig1)
-
-    # --- Plot 2: Transaction Amount Distribution
-    with col2:
-        st.markdown("**Transaction Amount**")
-        fig2, ax2 = plt.subplots()
-        ax2.hist(df['Amount'], bins=50, color='skyblue', edgecolor='black')
-        ax2.set_title("Amount")
-        st.pyplot(fig2)
-
-    # --- Plot 3: Time Feature Distribution
-    with col3:
-        st.markdown("**Time Feature**")
-        fig3, ax3 = plt.subplots()
-        ax3.hist(df['Time'], bins=100, color='orange', edgecolor='black')
-        ax3.set_title("Time")
-        st.pyplot(fig3)
