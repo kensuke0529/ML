@@ -1,12 +1,16 @@
+import os
 import streamlit as st
 import numpy as np
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
-
+improt os
 
 # Load model
-model = joblib.load("../models/xgbclassifier.joblib")
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+model_path = os.path.join(project_root, "models", "xgbclassifier.joblib")
+model = joblib.load(model_path)
 
 
 st.set_page_config(page_title="Fraud Detection", layout="wide")
