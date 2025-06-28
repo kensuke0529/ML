@@ -4,7 +4,7 @@ import numpy as np
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
-improt os
+import os
 
 # Load model
 
