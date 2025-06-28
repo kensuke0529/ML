@@ -7,8 +7,13 @@ import xgboost as xgb
 
 # Load model
 model_path = 'models/xgbclassifier.json'
-model = xgb.Booster()
-model.load_model(model_path)
+try:
+    model = xgb.Booster()
+    model.load_model(model_path)
+except Exception as e:
+    st.error(f"❌ Failed to load model: {e}")
+    st.stop()
+
 
 st.set_page_config(page_title="Fraud Detection", layout="wide")
 st.title("💳 Fraud Detection App")
