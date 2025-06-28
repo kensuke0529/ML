@@ -14,7 +14,6 @@ except Exception as e:
     st.error(f"❌ Failed to load model: {e}")
     st.stop()
 
-
 st.set_page_config(page_title="Fraud Detection", layout="wide")
 st.title("💳 Fraud Detection App")
 
