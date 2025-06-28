@@ -1,26 +1,23 @@
 import os
 import streamlit as st
 import numpy as np
-import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
+import xgboost as xgb
 
 # Load model
-
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-model_path = os.path.join(project_root, "models", "xgbclassifier.joblib")
-model = joblib.load(model_path)
-
+model_path = 'models/xgbclassifier.json'
+model = xgb.Booster()
+model.load_model(model_path)
 
 st.set_page_config(page_title="Fraud Detection", layout="wide")
 st.title("💳 Fraud Detection App")
 
 st.markdown(
-    "Use the form below to simulate a credit card transaction and check if it might be **fraudulent**.")
+    "Use the form below to simulate a credit card transaction and check if it might be **fraudulent**."
+)
 
-tab1, tab2 = st.tabs(
-    ["📈 Model", "🗃 Model Performance Metrics"])
+tab1, tab2 = st.tabs(["📈 Model", "🗃 Model Performance Metrics"])
 
 with tab1:
     # Define features
@@ -36,20 +33,21 @@ with tab1:
         st.markdown(
             "🔧 Enter the transaction features (use actual or test values):")
 
-        # Group 5 columns
         cols = st.columns(5)
         for i, name in enumerate(feature_names):
             col = cols[i % 5]
             val = col.number_input(name, value=0.0, step=0.01, format="%.3f")
             input_values.append(val)
 
-    # Convert to array
+    # Convert input to numpy array and reshape for model
     features = np.array(input_values).reshape(1, -1)
 
     # Prediction button
     if st.button("🚀 Predict Fraud"):
-        pred = model.predict(features)[0]
-        prob = model.predict_proba(features)[0][1]
+        dmat = xgb.DMatrix(features)
+        probs = model.predict(dmat)
+        pred = int(probs[0] > 0.5)
+        prob = probs[0]
 
         st.markdown("---")
         st.subheader("🔍 Prediction Result")
@@ -61,7 +59,6 @@ with tab1:
                 f"✅ Legitimate Transaction\n\n**Probability:** {prob:.2f}")
 
 with tab2:
-
     st.write("Here are the performance metrics of the trained models:")
 
     data = {
